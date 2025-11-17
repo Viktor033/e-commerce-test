@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Viandas - E-commerce</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="Style.css" />
+</head>
+<body>
+
+  <!-- Barra superior -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+        <img src="IMG/logo_footer_widget.png" alt="Logo Viandas" style="height:40px;" class="me-2">
+        Manoplas
+      </a>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <!-- Botón de carrito con badge -->
+            <a href="carrito.html" class="btn btn-primary btn-lg position-relative">
+              🛒 Carrito
+              <span id="carritoBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                0
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sección de productos -->
+  <div class="container my-4">
+    <h2 class="mb-3">Productos disponibles</h2>
+    <div class="row g-4">
+
+  <!-- Producto 1 -->
+  <div class="col-sm-6 col-md-4">
+    <div class="card h-100">
+      <!-- Imagen del producto -->
+      <img src="IMG/vianda-1.jpg" class="card-img-top" alt="Vianda saludable">
+      
+      <!-- Contenido de la tarjeta -->
+      <div class="card-body">
+        <h5 class="card-title">Vianda saludable</h5>
+        <p class="card-text">Proteínas, vegetales y carbohidratos balanceados.</p>
+        <button class="btn btn-primary w-100 btn-agregar"
+                data-nombre="Vianda saludable"
+                data-precio="1200">
+          Agregar al carrito
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+      <!-- Producto 2 -->
+  <div class="col-sm-6 col-md-4">
+    <div class="card h-100">
+      <!-- Imagen del producto -->
+      <img src="IMG/vianda-.jpg" class="card-img-top" alt="Vianda saludable">
+      
+      <!-- Contenido de la tarjeta -->
+      <div class="card-body">
+        <h5 class="card-title">Vianda saludable</h5>
+        <p class="card-text">Proteínas, vegetales y carbohidratos balanceados.</p>
+        <button class="btn btn-primary w-100 btn-agregar"
+                data-nombre="Vianda saludable"
+                data-precio="1200">
+          Agregar al carrito
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+      <!-- Producto 3 -->
+  <div class="col-sm-6 col-md-4">
+    <div class="card h-100">
+      <!-- Imagen del producto -->
+      <img src="IMG/vianda-3.jpg" class="card-img-top" alt="Vianda saludable">
+      
+      <!-- Contenido de la tarjeta -->
+      <div class="card-body">
+        <h5 class="card-title">Vianda saludable</h5>
+        <p class="card-text">Proteínas, vegetales y carbohidratos balanceados.</p>
+        <button class="btn btn-primary w-100 btn-agregar"
+                data-nombre="Vianda saludable"
+                data-precio="1200">
+          Agregar al carrito
+        </button>
+      </div>
+    </div>
+  </div>
+
+      <!-- Podés seguir agregando más productos con col-sm-6 col-md-4 -->
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Tu script personalizado -->
+  <script src="JS/Script.js"></script>
+</body>
+</html>
