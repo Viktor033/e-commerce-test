@@ -65,6 +65,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     renderCarrito();
 
+    // Mostrar/ocultar formulario de tarjeta según el método elegido
+    const radiosPago = document.querySelectorAll('input[name="metodoPago"]');
+    const formTarjeta = document.getElementById("formTarjeta");
+
+    radiosPago.forEach(radio => {
+      radio.addEventListener("change", () => {
+        if (radio.value === "tarjeta") {
+          formTarjeta.style.display = "block";
+        } else {
+          formTarjeta.style.display = "none";
+        }
+      });
+    });
+
     // Confirmar compra con modal
     formulario.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -83,23 +97,95 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Acción al confirmar compra
-    document.getElementById("btnConfirmarCompra").addEventListener("click", () => {
+    document.getElementById("btnConfirmarCompra").addEventListener("click", async () => {
       const cantidadProductos = carrito.length;
       const total = carrito.reduce((acc, item) => acc + item.precio, 0);
       const nombres = carrito.map(item => item.nombre).join(", ");
+      const metodoPago = document.querySelector('input[name="metodoPago"]:checked').value;
 
-      mensajeCompra.innerHTML = `
-        <div class="alert alert-success" role="alert">
-          ✅ ¡Compra confirmada!<br>
-          ${cantidadProductos} producto(s) – Total: $${total}<br>
-          <small>${nombres}</small>
-        </div>
-      `;
+      if (metodoPago === "mercadopago") {
+        try {
+          const preferenciaId = "TEST-PREF-123";
 
-      carrito = [];
-      guardarCarrito();
-      renderCarrito();
-      bootstrap.Modal.getInstance(document.getElementById("modalConfirmarCompra")).hide();
+          const mp = new MercadoPago("TU_PUBLIC_KEY", { locale: "es-AR" });
+          mp.checkout({
+            preference: { id: preferenciaId },
+            autoOpen: true
+          });
+
+          bootstrap.Modal.getInstance(document.getElementById("modalConfirmarCompra")).hide();
+          return;
+        } catch (err) {
+          mensajeCompra.innerHTML = `
+            <div class="alert alert-danger" role="alert">
+              ❌ Hubo un problema al iniciar el pago con MercadoPago. Intenta nuevamente.
+            </div>
+          `;
+          return;
+        }
+      }
+
+      if (metodoPago === "tarjeta") {
+        const numero = document.getElementById("numeroTarjeta").value.trim();
+        const vencimiento = document.getElementById("vencimientoTarjeta").value.trim();
+        const cvv = document.getElementById("cvvTarjeta").value.trim();
+
+        if (!numero || !vencimiento || !cvv) {
+          mensajeCompra.innerHTML = `
+            <div class="alert alert-warning" role="alert">
+              ⚠️ Completá todos los datos de la tarjeta para continuar.
+            </div>
+          `;
+          return;
+        }
+
+        mensajeCompra.innerHTML = `
+          <div class="alert alert-success" role="alert">
+            ✅ ¡Compra confirmada con tarjeta!<br>
+            ${cantidadProductos} producto(s) – Total: $${total}<br>
+            <small>${nombres}</small>
+          </div>
+        `;
+
+        carrito = [];
+        guardarCarrito();
+        renderCarrito();
+        bootstrap.Modal.getInstance(document.getElementById("modalConfirmarCompra")).hide();
+        return;
+      }
+
+      if (metodoPago === "transferencia") {
+        const cbu = "1234567890123456789012";
+        const alias = "viandas.tienda";
+        const whatsapp = "5493791234567"; // número dinámico
+
+        mensajeCompra.innerHTML = `
+          <div class="alert alert-info" role="alert">
+            📩 Para completar tu compra, realiza una transferencia bancaria:<br>
+            <strong>CBU:</strong> <span id="cbuTexto">${cbu}</span>
+            <button class="btn btn-sm btn-outline-primary ms-2" id="btnCopiarCBU">Copiar</button><br>
+            <strong>Alias:</strong> ${alias}<br>
+            <strong>Monto:</strong> $${total}<br>
+            <small>${nombres}</small><br><br>
+            📲 Envía el comprobante a nuestro WhatsApp: 
+            <a href="https://wa.me/${whatsapp}" target="_blank">+${whatsapp}</a>
+          </div>
+        `;
+
+        // Acción para copiar el CBU al portapapeles
+        document.getElementById("btnCopiarCBU").addEventListener("click", () => {
+          const cbuTexto = document.getElementById("cbuTexto").textContent;
+          navigator.clipboard.writeText(cbuTexto).then(() => {
+            alert("✅ CBU copiado al portapapeles");
+          });
+        });
+
+        carrito = [];
+        guardarCarrito();
+        renderCarrito();
+        bootstrap.Modal.getInstance(document.getElementById("modalConfirmarCompra")).hide();
+        return;
+      }
     });
 
     // Acción al confirmar eliminación
