@@ -121,20 +121,20 @@
       </div>
     </div>
 
-    <!-- Botón Volver atrás -->
-    <div class="container my-4 text-center mb-5">
-      <button class="btn btn-secondary btn-lg" onclick="history.back()">← Volver atrás</button>
-    </div>
-
-
-    <!-- Footer fijo -->
-    <footer class="bg-dark text-white text-center py-3 fixed-bottom">
-      <div class="container">
+ 
+    <!-- Footer fijo con botón volver -->
+    <footer class="bg-dark text-white py-3 fixed-bottom">
+      <div class="container d-flex justify-content-between align-items-center">
+        <!-- Texto a la izquierda -->
         <p class="small mb-0">
-          © 2025 Viandas - Manoplas Copyright &copy; 2024 by VK_Dev_Web| All Rights Reserved.
+          © 2025 Viandas - Manoplas | VK_Dev_Web | All Rights Reserved.
         </p>
+
+        <!-- Botón a la derecha -->
+        <button class="btn btn-secondary btn-sm" onclick="history.back()">← Volver atrás</button>
       </div>
     </footer>
+
 
     <!-- MercadoPago Script-->
      <script src="https://sdk.mercadopago.com/js/v2"></script>
