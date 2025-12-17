@@ -149,3 +149,179 @@
       .input { border-color: #333; }
       .btn--primary { outline: 3px solid #000; }
     }
+
+    /* Animación del badge del carrito */
+    #carritoBadge {
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    #carritoBadge.animar {
+      transform: scale(1.35);
+      background-color: #dc3545; /* rojo Bootstrap */
+    }
+
+    /* Animaciones carrito */
+    .carrito-item {
+      animation: fadeInUp 0.25s ease;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* cuando se elimina */
+    .carrito-item.saliendo {
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: all 0.25s ease;
+    }
+
+
+/* =========================
+   WHATSAPP FLOTANTE
+========================= */
+.whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background-color: #25d366;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.whatsapp-float img {
+  width: 35px;
+  height: 35px;
+}
+
+/* ===============
+   EFECTO HOVER
+==================*/
+.whatsapp-float:hover {
+  transform: scale(1.12);
+  background-color: #1ebe5d;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+/* ===========
+   ESCRIBINOS
+============== */
+.whatsapp-float::after {
+  content: "Escribinos";
+  position: absolute;
+  right: 65px;
+  background-color: #25d366;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(5px);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.whatsapp-float:hover::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================
+   BOTÓN SUBIR ARRIBA
+========================= */
+
+.scroll-top {
+  position: fixed;
+  bottom: 100px; /* arriba del WhatsApp */
+  right: 20px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: none;
+  background-color: #0d6efd;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  display: none; /* se muestra con JS */
+  z-index: 998;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.scroll-top:hover {
+  background-color: #084298;
+}
+
+/* EFRFECT HOVER */
+.scroll-top:hover {
+  transform: scale(1.12);
+  background-color: #0b5ed7;
+  box-shadow: 0 6px 18px rgba(0,0,0,.45);
+}
+
+/* LOOLTIP TOP */
+/* BOTÓN SCROLL TOP */
+.scroll-top {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: #0d6efd;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  z-index: 999;
+  transition: transform 0.2s ease;
+}
+
+.scroll-top:hover {
+  transform: scale(1.1);
+}
+
+/* TOOLTIP */
+.scroll-top .tooltip-text {
+  position: absolute;
+  right: 55px;
+  background: #0d6efd;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(5px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Mostrar tooltip al hover */
+.scroll-top:hover .tooltip-text {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+
+
+
+
+
