@@ -19,3 +19,4 @@ export function calcularTotal(carrito) {
     0
   );
 }
+
