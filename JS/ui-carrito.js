@@ -188,7 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-  /* ========================
+/* ========================
   LOGICA MODAL VACIAR CARRITO
 ============================= */
 
@@ -202,17 +202,31 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("modalVaciarCarrito")
   );
 
-  // Abrir modal
+  const toastVacio = document.getElementById("toastCarritoVacio");
+  const toastVaciado = document.getElementById("toastCarritoVaciado");
+
+  // 👉 Click en "Vaciar carrito"
   btnVaciar.addEventListener("click", () => {
+    const carrito = loadCarrito();
+
+    // 🧠 Si ya está vacío → toast
+    if (carrito.length === 0) {
+      new bootstrap.Toast(toastVacio).show();
+      return;
+    }
+
+    // Si tiene productos → mostrar modal
     modalVaciar.show();
   });
 
-  // Confirmar vaciado
+  // 👉 Confirmar vaciado
   btnConfirmar.addEventListener("click", () => {
     saveCarrito([]);
     renderCarrito();
     actualizarBadge();
+
     modalVaciar.hide();
+    new bootstrap.Toast(toastVaciado).show();
   });
 });
 
