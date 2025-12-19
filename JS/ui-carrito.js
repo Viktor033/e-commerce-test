@@ -1,4 +1,5 @@
 import { loadCarrito, saveCarrito } from "./storage.js";
+import { generarMensajeWhatsApp, enviarWhatsApp } from "./whatsapp.js";
 
 let productoSeleccionado = null;
 
@@ -95,9 +96,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const producto = carrito.find(p => p.nombre === productoSeleccionado);
     if (!producto) return;
 
-    if (cantidadEliminar < 1) cantidadEliminar = 1;
-    if (cantidadEliminar > producto.cantidad)
-      cantidadEliminar = producto.cantidad;
+    cantidadEliminar = Math.min(
+      Math.max(cantidadEliminar, 1),
+      producto.cantidad
+    );
 
     producto.cantidad -= cantidadEliminar;
 
@@ -117,13 +119,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* =========================
-   LOGICA DEL RESUMEN
+   RESUMEN DE COMPRA
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.querySelector("form");
   if (!form) return;
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", e => {
     e.preventDefault();
 
     const carrito = loadCarrito();
@@ -150,11 +152,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     totalSpan.textContent = total;
 
-    const metodo = document.querySelector(
-      'input[name="metodoPago"]:checked'
-    )?.nextElementSibling.textContent;
+    const metodo =
+      document.querySelector('input[name="metodoPago"]:checked')
+        ?.nextElementSibling.textContent || "No seleccionado";
 
-    metodoSpan.textContent = metodo || "No seleccionado";
+    metodoSpan.textContent = metodo;
 
     new bootstrap.Modal(
       document.getElementById("modalResumenCompra")
@@ -162,36 +164,45 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-/* ============================
-  CONFIRMACION FINAL DE COMPRA
-=============================== */
-
+/* =========================
+   CONFIRMAR COMPRA FINAL
+========================= */
 document.addEventListener("DOMContentLoaded", () => {
   const btnFinal = document.getElementById("btnConfirmarCompraFinal");
   if (!btnFinal) return;
 
   btnFinal.addEventListener("click", () => {
-    // Limpiar carrito
-    localStorage.removeItem("carrito");
+    const carrito = loadCarrito();
+    if (carrito.length === 0) return;
+
+    let total = 0;
+    carrito.forEach(p => (total += p.precio * p.cantidad));
+
+    const metodoPago =
+      document.querySelector('input[name="metodoPago"]:checked')
+        ?.nextElementSibling.textContent || "No especificado";
+
+    const mensaje = generarMensajeWhatsApp(carrito, total, metodoPago);
+
+    enviarWhatsApp(mensaje);
+
+    saveCarrito([]);
     actualizarBadge();
     renderCarrito();
 
-    // Cerrar modal resumen
     bootstrap.Modal.getInstance(
       document.getElementById("modalResumenCompra")
     ).hide();
 
-    // Mostrar modal compra realizada
     new bootstrap.Modal(
       document.getElementById("modalCompraRealizada")
     ).show();
   });
 });
 
-/* ========================
-  LOGICA MODAL VACIAR CARRITO
-============================= */
-
+/* =========================
+   VACIAR CARRITO
+========================= */
 document.addEventListener("DOMContentLoaded", () => {
   const btnVaciar = document.getElementById("btnVaciarCarrito");
   const btnConfirmar = document.getElementById("btnConfirmarVaciar");
@@ -205,21 +216,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const toastVacio = document.getElementById("toastCarritoVacio");
   const toastVaciado = document.getElementById("toastCarritoVaciado");
 
-  // 👉 Click en "Vaciar carrito"
   btnVaciar.addEventListener("click", () => {
-    const carrito = loadCarrito();
-
-    // 🧠 Si ya está vacío → toast
-    if (carrito.length === 0) {
+    if (loadCarrito().length === 0) {
       new bootstrap.Toast(toastVacio).show();
       return;
     }
-
-    // Si tiene productos → mostrar modal
     modalVaciar.show();
   });
 
-  // 👉 Confirmar vaciado
   btnConfirmar.addEventListener("click", () => {
     saveCarrito([]);
     renderCarrito();
@@ -230,10 +234,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-
-/* ================
-  VOLVER AL INICIO
-=================== */
+/* =========================
+   VOLVER AL HOME
+========================= */
 document.addEventListener("DOMContentLoaded", () => {
   const btnVolver = document.getElementById("btnVolverHome");
   if (!btnVolver) return;
@@ -242,11 +245,3 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "Home.html";
   });
 });
-
-
-
-
-
-
-
-

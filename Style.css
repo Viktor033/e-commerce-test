@@ -319,6 +319,16 @@
   transform: translateY(0);
 }
 
+/* Animación vaciar carrito */
+.carrito-item {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.carrito-item.vaciando {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
 
 
 

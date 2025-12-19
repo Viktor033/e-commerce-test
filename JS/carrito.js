@@ -1,5 +1,6 @@
 // JS/carrito.js
-import { saveCarrito } from "./storage.js";
+import { generarMensajeWhatsApp, WHATSAPP_NUMERO } from "./Whatsapp.js";
+import { loadCarrito, saveCarrito } from "./storage.js";
 
 export function agregarProducto(carrito, producto) {
   const existente = carrito.find(p => p.id === producto.id);
