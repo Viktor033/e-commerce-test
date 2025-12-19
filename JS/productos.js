@@ -1,40 +1,31 @@
-// JS/productos.js
+// js/productos.js
 import { loadCarrito, saveCarrito } from "./storage.js";
 import { actualizarBadge } from "./ui-carrito.js";
 
 export function initProductos() {
-  const botones = document.querySelectorAll(".btn-agregar");
 
-  botones.forEach(boton => {
-    boton.addEventListener("click", () => {
+  // 🔹 Delegación de eventos (CLAVE PARA MOBILE)
+  document.addEventListener("click", (e) => {
+    const boton = e.target.closest(".btn-agregar");
+    if (!boton) return;
 
-      // ✅ Cargar carrito ACTUAL en cada click
-      let carrito = loadCarrito();
+    const carrito = loadCarrito();
 
-      const nombre = boton.dataset.nombre;
-      const precio = parseFloat(boton.dataset.precio);
+    const producto = {
+      id: boton.dataset.id,
+      nombre: boton.dataset.nombre,
+      precio: Number(boton.dataset.precio)
+    };
 
-      const existente = carrito.find(p => p.nombre === nombre);
+    const existente = carrito.find(p => p.id === producto.id);
 
-      if (existente) {
-        existente.cantidad++;
-      } else {
-        carrito.push({
-          nombre,
-          precio,
-          cantidad: 1
-        });
-      }
+    if (existente) {
+      existente.cantidad++;
+    } else {
+      carrito.push({ ...producto, cantidad: 1 });
+    }
 
-      saveCarrito(carrito);
-      actualizarBadge();
-
-      // 🔔 Toast feedback
-      const toastEl = document.getElementById("toastCarrito");
-      if (toastEl) {
-        const toast = new bootstrap.Toast(toastEl);
-        toast.show();
-      }
-    });
+    saveCarrito(carrito);
+    actualizarBadge();
   });
 }

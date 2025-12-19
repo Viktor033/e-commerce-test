@@ -129,10 +129,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-/* ==============
-  BTN SCROLL TOP
-=================*/
-
 
 
 
