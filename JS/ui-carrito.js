@@ -1,5 +1,7 @@
+// js/ui_carrito.js
 import { loadCarrito, saveCarrito } from "./storage.js";
-import { generarMensajeWhatsApp, enviarWhatsApp } from "./whatsapp.js";
+import { calcularTotal } from "./carrito.js";
+import { generarMensajeWhatsApp, enviarWhatsApp } from "./Whatsapp.js";
 
 let productoSeleccionado = null;
 
@@ -136,11 +138,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const metodoSpan = document.getElementById("resumenMetodoPago");
 
     listaResumen.innerHTML = "";
-    let total = 0;
 
     carrito.forEach(item => {
-      total += item.precio * item.cantidad;
-
       const li = document.createElement("li");
       li.className = "list-group-item d-flex justify-content-between";
       li.innerHTML = `
@@ -150,6 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
       listaResumen.appendChild(li);
     });
 
+    const total = calcularTotal(carrito);
     totalSpan.textContent = total;
 
     const metodo =
@@ -175,15 +175,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const carrito = loadCarrito();
     if (carrito.length === 0) return;
 
-    let total = 0;
-    carrito.forEach(p => (total += p.precio * p.cantidad));
-
+    const total = calcularTotal(carrito);
     const metodoPago =
       document.querySelector('input[name="metodoPago"]:checked')
         ?.nextElementSibling.textContent || "No especificado";
 
     const mensaje = generarMensajeWhatsApp(carrito, total, metodoPago);
-
     enviarWhatsApp(mensaje);
 
     saveCarrito([]);
